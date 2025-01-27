@@ -1,38 +1,31 @@
 pipeline {
-    environment {
-        imagename = "python/app"
+  environment {
+    imagename = "kevalnagda/flaskapp"
+    registryCredential = 'kevalnagda'
+    dockerImage = ''
+  }
+  agent any
+  stages {
+    stage('Cloning Git') {
+      steps {
+        git([url: 'https://github.com/kevalnagda/movieapp.git', branch: 'main', credentialsId: 'kevalnagda'])
+ 
+      }
     }
-    agent any
-
-    stages {
-        stage('Clone Repository') {
-            steps {
-                git url: 'https://github.com/navy77/jenkins-python.git', branch: 'main'
-            }
+    stage('Building image') {
+      steps{
+        script {
+          dockerImage = docker.build imagename
         }
-
-        stage('Test') {
-            steps {
-                sh '''
-                echo "Running tests..."
-                # Replace this with actual test commands
-                echo "Tests passed!"
-                '''
-            }
-        }
-
-        stage('Build') {
-            agent {
-                docker {
-                    image 'python:3.12-alpine'
-                }
-            }
-            steps {
-                sh '''
-                echo "Building Docker image..."
-                docker build -t python/app .
-                '''
-            }
-        }
+      }
     }
+
+    stage('Remove Unused docker image') {
+      steps{
+        sh "docker rmi $imagename:$BUILD_NUMBER"
+         sh "docker rmi $imagename:latest"
+ 
+      }
+    }
+  }
 }
