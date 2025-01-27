@@ -1,5 +1,4 @@
 pipeline {
-
     environment {
     imagename = "python/app"
     dockerImage = ''
@@ -21,13 +20,13 @@ pipeline {
             }
         }
 
-        stage('Approval') {
-            steps {
-                timeout(time: 180, unit: 'SECONDS') {
-                    input message: 'Do you wish to deploy tp production ?', ok: 'Yes ,I am sure!'
-            }
-                }
-        }
+        // stage('Approval') {
+        //     steps {
+        //         timeout(time: 180, unit: 'SECONDS') {
+        //             input message: 'Do you wish to deploy tp production ?', ok: 'Yes ,I am sure!'
+        //     }
+        //         }
+        // }
 
         stage('Build') {
             agent {
@@ -36,8 +35,8 @@ pipeline {
                 }
             }
             steps {
-                    // sh 'docker build -t python-app .'
-                    dockerImage = docker.build imagename
+                    sh 'docker build -t python-app .'
+                    // dockerImage = docker.build imagename
             }
         }
 
