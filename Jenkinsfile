@@ -26,7 +26,6 @@ pipeline {
             }
             steps {
                     sh 'docker build -t python-app .'
-                    sh 'docker run -d --name python python-app:latest'
             }
         }
 
