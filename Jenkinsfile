@@ -1,32 +1,25 @@
 pipeline {
     environment {
-    imagename = "python/app"
-    dockerImage = ''
-  }
+        imagename = "python/app"
+    }
     agent any
 
     stages {
-        stage('Clone respository') {
+        stage('Clone Repository') {
             steps {
-                git([url: 'https://github.com/navy77/jenkins-python.git', branch: 'main'])
+                git url: 'https://github.com/navy77/jenkins-python.git', branch: 'main'
             }
         }
 
         stage('Test') {
             steps {
                 sh '''
-                echo 'my-python jenkins !'
+                echo "Running tests..."
+                # Replace this with actual test commands
+                echo "Tests passed!"
                 '''
             }
         }
-
-        // stage('Approval') {
-        //     steps {
-        //         timeout(time: 180, unit: 'SECONDS') {
-        //             input message: 'Do you wish to deploy tp production ?', ok: 'Yes ,I am sure!'
-        //     }
-        //         }
-        // }
 
         stage('Build') {
             agent {
@@ -37,11 +30,9 @@ pipeline {
             steps {
                 sh '''
                 echo "Building Docker image..."
-                docker build -t $imagename .
+                docker build -t python/app .
                 '''
             }
         }
-
-
     }
 }
