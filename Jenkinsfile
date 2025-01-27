@@ -1,23 +1,34 @@
 pipeline {
-  environment {
-    imagename = "kevalnagda/flaskapp"
-    registryCredential = 'kevalnagda'
-    dockerImage = ''
-  }
-  agent any
-  stages {
-    stage('Cloning Git') {
-      steps {
-        git([url: 'https://github.com/kevalnagda/movieapp.git', branch: 'main', credentialsId: 'kevalnagda'])
- 
-      }
+    environment {
+        image_name = "python/app"
     }
-    stage('Building image') {
-      steps{
-        script {
-          dockerImage = docker.build imagename
+    agent any
+
+    stages {
+
+        stage('Clone Repository') {
+            steps {
+                git url: 'https://github.com/navy77/jenkins-python.git', branch: 'main'
+            }
         }
-      }
+
+        stage('Test') {
+            steps {
+                sh '''
+                echo "Running tests..."
+                '''
+            }
+        }
+
+        stage('Build images') {
+            steps{
+                sh '''
+                ls -la
+                docker build -t python-app .
+                docker run -d --name python python-app:latest
+                '''
+            }
+            }
+        }
     }
-  }
-}
+
