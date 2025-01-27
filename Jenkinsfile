@@ -1,16 +1,22 @@
 pipeline {
+
+    environment {
+    imagename = "python/app"
+    dockerImage = ''
+  }
     agent any
 
     stages {
-        stage('cClone respository') {
-            checout scm
+        stage('Clone respository') {
+            steps {
+                git([url: 'https://github.com/navy77/jenkins-python.git', branch: 'main'])
+            }
         }
 
         stage('Test') {
             steps {
                 sh '''
                 echo 'my-python jenkins !'
-                ls -la
                 '''
             }
         }
@@ -30,7 +36,8 @@ pipeline {
                 }
             }
             steps {
-                    sh 'docker build -t python-app .'
+                    // sh 'docker build -t python-app .'
+                    dockerImage = docker.build imagename
             }
         }
 
