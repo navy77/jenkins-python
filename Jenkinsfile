@@ -2,10 +2,15 @@ pipeline {
     agent any
 
     stages {
+        stage('cClone respository') {
+            checout scm
+        }
+
         stage('Test') {
             steps {
                 sh '''
                 echo 'my-python jenkins !'
+                ls -la
                 '''
             }
         }
