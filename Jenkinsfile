@@ -35,8 +35,10 @@ pipeline {
                 }
             }
             steps {
-                    sh 'docker build -t python-app .'
-                    // dockerImage = docker.build imagename
+                sh '''
+                echo "Building Docker image..."
+                docker build -t $imagename .
+                '''
             }
         }
 
